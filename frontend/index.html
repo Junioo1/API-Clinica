@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Vida · Agendamento</title>
+<style>
+:root{--bg:#f4f7fa;--card:#fff;--tx:#14233a;--mut:#64748b;--bd:#e2e8f0;--pri:#0f766e;--pri2:#0d5f59;--soft:#e6f4f2;--ok:#15803d;--okb:#dcfce7;--wa:#b45309;--wab:#fef3c7;--er:#b91c1c;--erb:#fee2e2;--sb:#0f2a3d}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1520;--card:#122030;--tx:#e6edf5;--mut:#93a4b8;--bd:#223347;--soft:#12352f;--okb:#12351f;--wab:#3a2c10;--erb:#3d1818;--sb:#08141e;--pri:#14b8a6;--pri2:#2dd4bf}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{background:var(--pri);color:#fff;border:0;padding:9px 16px;border-radius:9px;cursor:pointer;font-weight:600}.btn:hover{background:var(--pri2)}
+.btn.s{background:var(--card);color:var(--tx);border:1px solid var(--bd)}.btn.d{background:var(--er)}.btn.t{padding:5px 10px;font-size:13px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:9px;background:var(--card)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);border-color:transparent}
+label{display:block;font-size:13px;font-weight:600;margin:0 0 4px;color:var(--mut)}
+.f{margin-bottom:12px}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+#app{display:flex;min-height:100vh}
+aside{width:236px;background:var(--sb);color:#cfe3ee;padding:18px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.logo{font-weight:800;font-size:18px;color:#fff;padding:4px 10px 16px}.logo span{color:#2dd4bf}
+aside a{color:inherit;text-decoration:none;padding:10px 12px;border-radius:9px;display:flex;gap:10px}
+aside a:hover{background:#ffffff14}aside a.on{background:var(--pri);color:#fff}
+main{flex:1;min-width:0}header{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+.user{display:flex;align-items:center;gap:12px}.av{width:36px;height:36px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:700}
+.pf{font-size:12px;color:var(--mut);text-transform:capitalize}#view{padding:26px 28px;max-width:1100px}
+h1{margin:0 0 4px;font-size:22px}.sub{color:var(--mut);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}.kpi b{display:block;font-size:28px}.kpi small{color:var(--mut)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{font-size:12px;text-transform:uppercase;color:var(--mut)}tr.c:hover{background:var(--soft);cursor:pointer}.tw{overflow-x:auto}
+.b{padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700}.CONFIRMADO{background:var(--okb);color:var(--ok)}.AFETADO{background:var(--wab);color:var(--wa)}.CANCELADO{background:var(--erb);color:var(--er)}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
+.slots{display:flex;flex-wrap:wrap;gap:8px}.slot{padding:8px 14px;border:1px solid var(--bd);border-radius:9px;background:var(--card);cursor:pointer}
+.slot.on,.slot:hover{background:var(--pri);color:#fff;border-color:var(--pri)}
+.bar2{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.bar2>*{width:auto;flex:1;min-width:150px}
+.empty{text-align:center;color:var(--mut);padding:28px}
+#mw{position:fixed;inset:0;background:#0008;display:none;place-items:center;z-index:20;padding:16px}#mw.on{display:grid}
+.m{background:var(--card);border-radius:16px;padding:22px;width:100%;max-width:520px;max-height:90vh;overflow:auto}.m h2{margin:0 0 12px;font-size:18px}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 10px;font-size:14px}.kv dt{color:var(--mut)}.kv dd{margin:0}
+#toasts{position:fixed;right:18px;bottom:18px;display:grid;gap:8px;z-index:30}.t1{padding:11px 16px;border-radius:10px;color:#fff;background:var(--ok);box-shadow:0 6px 18px #0004}.t1.er{background:var(--er)}
+#login{min-height:100vh;display:grid;place-items:center;padding:16px;background:linear-gradient(135deg,#0f2a3d,#0f766e)}
+#login .card{width:100%;max-width:400px;padding:28px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.chips button{border:1px solid var(--bd);background:var(--soft);border-radius:99px;padding:3px 11px;cursor:pointer;font-size:13px}
+#mb{display:none}
+@media(max-width:800px){aside{position:fixed;left:-250px;z-index:15;transition:left .2s}aside.on{left:0}#mb{display:inline-block}header,#view{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<div id="root"></div><div id="mw"></div><div id="toasts"></div>
+<script>
+const API=new URLSearchParams(location.search).get('api')||'';
+// A API não tem rotas para listar profissionais/salas/pacientes: usamos o catálogo do seed (README).
+const PROF={1:['Dra. Ana','Clínica Geral'],2:['Dr. Bruno','Fisioterapia'],3:['Dra. Carla','Nutrição']},SALA={1:'Sala 1',2:'Sala 2'},PAC={1:'Maria',2:'João',3:'Paula'};
+const TIPO={INICIAL:'Inicial (40 min)',RETORNO:'Retorno (20 min)'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S=null;try{S=JSON.parse(sessionStorage.getItem('s'))}catch{}
+const hoje=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fdt=s=>s?s.slice(8,10)+'/'+s.slice(5,7)+' '+s.slice(11,16):'—';
+const opts=(o,sel)=>Object.entries(o).map(([k,v])=>`<option value="${k}" ${k==sel?'selected':''}>${esc(Array.isArray(v)?v[0]+' · '+v[1]:v)}</option>`).join('');
+
+async function api(p,o={}){
+  const h={};if(S)h.Authorization='Bearer '+S.token;let b=o.body;
+  if(b&&!(b instanceof URLSearchParams)){h['Content-Type']='application/json';b=JSON.stringify(b)}
+  let r;try{r=await fetch(API+p,{method:o.method||'GET',headers:h,body:b})}catch{throw Error('Não foi possível conectar à API.')}
+  let d=null;try{d=await r.json()}catch{}
+  if(r.status==401&&p!='/login'){sair(true);throw Error('Sessão expirada. Entre novamente.')}
+  if(!r.ok)throw Error(typeof d?.detail=='string'?d.detail:Array.isArray(d?.detail)?'Dados inválidos. Revise o formulário.':'Erro '+r.status);
+  return d}
+function toast(m,er){const e=document.createElement('div');e.className='t1'+(er?' er':'');e.textContent=m;$('#toasts').append(e);setTimeout(()=>e.remove(),4200)}
+const run=async(f)=>{try{return await f()}catch(e){toast(e.message,1)}};
+function modal(h){const w=$('#mw');w.innerHTML='<div class="m">'+h+'</div>';w.classList.add('on');w.onclick=e=>{if(e.target==w)fecha()}}
+const fecha=()=>$('#mw').classList.remove('on');
+function confirma(t,msg,fn,lbl='Confirmar'){modal(`<h2>${t}</h2><p>${msg}</p><div class="acts"><button class="btn s" onclick="fecha()">Voltar</button><button class="btn d" id="ok">${lbl}</button></div>`);$('#ok').onclick=()=>{fecha();fn()}}
+const badge=s=>`<span class="b ${s}">${s}</span>`;
+const nome=a=>PAC[a.paciente_id]||'Paciente #'+a.paciente_id;
+
+// ---------- Login ----------
+function telaLogin(){
+  $('#root').innerHTML=`<div id="login"><div class="card"><div class="logo" style="color:var(--tx)">Clínica <span style="color:var(--pri)">Vida</span></div>
+  <p class="sub">Entre para gerenciar seus agendamentos.</p>
+  <div class="f"><label>Usuário</label><input id="u" autocomplete="username"></div>
+  <div class="f"><label>Senha</label><input id="p" type="password" autocomplete="current-password"></div>
+  <button class="btn" style="width:100%" id="go">Entrar</button>
+  <div class="chips"><small style="width:100%;color:var(--mut)">Usuários de teste (senha 1234):</small>${['maria','joao','paula','ana','bruno','carla','recepcao','gestor'].map(u=>`<button data-u="${u}">${u}</button>`).join('')}</div></div></div>`;
+  document.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{$('#u').value=b.dataset.u;$('#p').value='1234'});
+  const go=()=>run(async()=>{const f=new URLSearchParams({username:$('#u').value.trim(),password:$('#p').value});
+    const d=await api('/login',{method:'POST',body:f});S={token:d.access_token,perfil:d.perfil,login:$('#u').value.trim()};
+    sessionStorage.setItem('s',JSON.stringify(S));location.hash='';iniciar()});
+  $('#go').onclick=go;$('#p').onkeydown=e=>e.key=='Enter'&&go()}
+function sair(q){S=null;sessionStorage.removeItem('s');telaLogin();if(!q)toast('Você saiu do sistema.')}
+
+// ---------- Layout ----------
+const MENU={
+ paciente:[['dash','▦','Início',pDash],['novo','＋','Agendar consulta',()=>novo(false)],['minhas','☰','Minhas consultas',lista]],
+ recepcao:[['dash','▦','Painel',rDash],['ags','☰','Agendamentos',lista],['novo','＋','Novo agendamento',()=>novo(true)],['agenda','▤','Agenda do profissional',agenda],['afet','⚠','Bloqueios e afetados',afetados]],
+ profissional:[['agenda','▤','Minha agenda',agenda],['bloq','⛔','Bloquear agenda',bloqueio]],
+ gestor:[['ocup','▥','Ocupação',ocupacao]]};
+function iniciar(){
+  if(!S)return telaLogin();
+  const m=MENU[S.perfil];
+  $('#root').innerHTML=`<div id="app"><aside id="sb"><div class="logo">Clínica <span>Vida</span></div>${m.map(x=>`<a href="#${x[0]}" data-r="${x[0]}"><span>${x[1]}</span>${x[2]}</a>`).join('')}</aside>
+  <main><header><button class="btn s t" id="mb" onclick="$('#sb').classList.toggle('on')">☰</button><b id="ttl"></b>
+  <div class="user"><div style="text-align:right"><div><b>${esc(S.login)}</b></div><div class="pf">${S.perfil}</div></div><div class="av">${esc(S.login[0].toUpperCase())}</div>
+  <button class="btn s t" id="out">Sair</button></div></header><div id="view"></div></main></div>`;
+  $('#out').onclick=()=>sair();rota()}
+function rota(){
+  if(!S)return;const m=MENU[S.perfil],id=location.hash.slice(1)||m[0][0],x=m.find(i=>i[0]==id)||m[0];
+  document.querySelectorAll('aside a').forEach(a=>a.classList.toggle('on',a.dataset.r==x[0]));
+  $('#ttl').textContent=x[2];$('#sb').classList.remove('on');run(()=>x[3]())}
+window.onhashchange=rota;
+const V=h=>$('#view').innerHTML=h;
+const tabela=(cols,rows,click)=>rows.length?`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr class="${click?'c':''}" ${click?`onclick="${click}(${i})"`:''}>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum registro encontrado.</div>';
+
+// ---------- Dashboards ----------
+const prox=l=>l.filter(a=>a.status!='CANCELADO'&&a.inicio>=hoje()).sort((a,b)=>a.inicio.localeCompare(b.inicio));
+let LST=[];
+async function pDash(){
+  const l=await api('/agendamentos');LST=l;const p=prox(l);
+  V(`<h1>Olá, ${esc(PAC[S.login=='maria'?1:S.login=='joao'?2:3]||S.login)}!</h1><p class="sub">Acompanhe e gerencie suas consultas.</p>
+  <div class="kpis"><div class="kpi"><small>Próximas consultas</small><b>${p.length}</b></div><div class="kpi"><small>Afetadas (a remarcar)</small><b>${l.filter(a=>a.status=='AFETADO').length}</b></div><div class="kpi"><small>Canceladas</small><b>${l.filter(a=>a.status=='CANCELADO').length}</b></div></div>
+  <div class="card"><h3 style="margin-top:0">Próxima consulta</h3>${p[0]?`<p><b>${fdt(p[0].inicio)}</b> · ${PROF[p[0].profissional_id][0]} (${PROF[p[0].profissional_id][1]}) · ${SALA[p[0].sala_id]}</p>`:'<div class="empty">Nenhuma consulta futura.</div>'}
+  <a class="btn" href="#novo" style="text-decoration:none;display:inline-block">Agendar nova consulta</a></div>`)}
+async function rDash(){
+  const l=await api('/agendamentos');LST=l;const h=hoje();
+  V(`<h1>Painel da recepção</h1><p class="sub">Visão geral dos agendamentos.</p>
+  <div class="kpis"><div class="kpi"><small>Consultas hoje</small><b>${l.filter(a=>a.inicio.startsWith(h)&&a.status!='CANCELADO').length}</b></div>
+  <div class="kpi"><small>Confirmadas</small><b>${l.filter(a=>a.status=='CONFIRMADO').length}</b></div>
+  <div class="kpi"><small>Afetadas a remarcar</small><b style="color:var(--wa)">${l.filter(a=>a.status=='AFETADO').length}</b></div>
+  <div class="kpi"><small>Encaixes</small><b>${l.filter(a=>a.origem=='ENCAIXE').length}</b></div></div>
+  <div class="card"><h3 style="margin-top:0">Precisam de remarcação</h3>${tabela(['#','Paciente','Profissional','Horário','Status'],l.filter(a=>a.status=='AFETADO').map(a=>[a.id,nome(a),PROF[a.profissional_id][0],fdt(a.inicio),badge(a.status)]),'det2')}</div>`);
+  window.det2=i=>detalhe(l.filter(a=>a.status=='AFETADO')[i])}
+
+// ---------- Listagem (HU2) ----------
+async function lista(){
+  LST=await api('/agendamentos');const rec=S.perfil=='recepcao';
+  V(`<h1>${rec?'Agendamentos':'Minhas consultas'}</h1><p class="sub">Clique em uma linha para ver detalhes${rec?', remarcar':' ou cancelar'}.</p>
+  <div class="card"><div class="bar2"><input id="q" placeholder="Buscar por paciente ou profissional…"><select id="st"><option value="">Todos os status</option><option>CONFIRMADO</option><option>AFETADO</option><option>CANCELADO</option></select></div><div id="tb"></div></div>`);
+  const draw=()=>{const q=$('#q').value.toLowerCase(),s=$('#st').value;
+    window.F=LST.filter(a=>(!s||a.status==s)&&(nome(a)+PROF[a.profissional_id][0]).toLowerCase().includes(q));
+    $('#tb').innerHTML=tabela(['#',...rec?['Paciente']:[],'Profissional','Tipo','Início','Sala','Status'],F.map(a=>[a.id,...rec?[nome(a)]:[],PROF[a.profissional_id][0],a.tipo+(a.origem=='ENCAIXE'?' · encaixe':''),fdt(a.inicio),SALA[a.sala_id],badge(a.status)]),'abre')};
+  window.abre=i=>detalhe(F[i]);$('#q').oninput=draw;$('#st').onchange=draw;draw()}
+
+// ---------- Detalhe, cancelar (HU3), histórico e remarcar (HU5) ----------
+async function detalhe(a){
+  const rec=S.perfil=='recepcao',ativo=a.status!='CANCELADO';let hist='';
+  if(rec){try{const h=await api(`/agendamentos/${a.id}/remarcacoes`);hist=h.length?`<h3>Histórico de remarcações</h3>`+h.map(x=>`<p style="margin:4px 0;font-size:14px">${fdt(x.em.replace(' ','T'))}: ${fdt(x.de_inicio)} (${PROF[x.de_profissional_id][0]}) → <b>${fdt(x.para_inicio)}</b> (${PROF[x.para_profissional_id][0]})${x.motivo?` · <i>${esc(x.motivo)}</i>`:''}</p>`).join(''):'<p class="sub">Sem remarcações.</p>'}catch{}}
+  modal(`<h2>Agendamento #${a.id} ${badge(a.status)}</h2><dl class="kv"><dt>Paciente</dt><dd>${nome(a)}</dd><dt>Profissional</dt><dd>${PROF[a.profissional_id].join(' · ')}</dd><dt>Tipo</dt><dd>${TIPO[a.tipo]}${a.origem=='ENCAIXE'?' (encaixe)':''}</dd><dt>Horário</dt><dd>${fdt(a.inicio)} até ${a.fim.slice(11)}</dd><dt>Sala</dt><dd>${SALA[a.sala_id]}</dd>${a.cancelado_em?`<dt>Cancelado em</dt><dd>${a.cancelado_em}${a.motivo_cancelamento?' · '+esc(a.motivo_cancelamento):''}</dd>`:''}</dl>${hist}
+  ${a.status=='AFETADO'?'<p style="color:var(--wa)">O profissional bloqueou este horário. É necessário remarcar.</p>':''}
+  <div class="acts"><button class="btn s" onclick="fecha()">Fechar</button>${ativo&&S.perfil=='paciente'?'<button class="btn d" id="ca">Cancelar consulta</button>':''}${ativo&&rec?'<button class="btn" id="re">Remarcar</button>':''}</div>`);
+  if($('#ca'))$('#ca').onclick=()=>{modal(`<h2>Cancelar consulta</h2><div class="f"><label>Motivo (opcional)</label><textarea id="mo" rows="3"></textarea></div><div class="acts"><button class="btn s" onclick="fecha()">Voltar</button><button class="btn d" id="ok">Confirmar cancelamento</button></div>`);
+    $('#ok').onclick=()=>run(async()=>{await api(`/agendamentos/${a.id}/cancelar`,{method:'POST',body:{motivo:$('#mo').value||null}});fecha();toast('Consulta cancelada.');rota()})};
+  if($('#re'))$('#re').onclick=()=>remarcar(a)}
+function remarcar(a){
+  modal(`<h2>Remarcar agendamento #${a.id}</h2><div class="f"><label>Novo início</label><input id="ni" type="datetime-local" step="1200" value="${a.inicio}"></div>
+  <div class="row"><div class="f"><label>Profissional</label><select id="np">${opts(PROF,a.profissional_id)}</select></div><div class="f"><label>Sala</label><select id="ns"><option value="">Automática</option>${opts(SALA)}</select></div></div>
+  <div class="f"><label>Motivo</label><input id="nm"></div><div class="acts"><button class="btn s" onclick="fecha()">Voltar</button><button class="btn" id="ok">Remarcar</button></div>`);
+  $('#ok').onclick=()=>run(async()=>{await api(`/agendamentos/${a.id}/remarcacoes`,{method:'POST',body:{novo_inicio:$('#ni').value,profissional_id:+$('#np').value,sala_id:$('#ns').value?+$('#ns').value:null,motivo:$('#nm').value||null}});fecha();toast('Agendamento remarcado.');rota()})}
+
+// ---------- Novo agendamento / encaixe (HU1, RN6) ----------
+async function novo(rec){
+  let sel=null;
+  V(`<h1>${rec?'Novo agendamento':'Agendar consulta'}</h1><p class="sub">Escolha profissional, tipo e data para ver os horários livres.</p><div class="card">
+  <div class="row">${rec?`<div class="f"><label>Paciente</label><select id="pc">${opts(PAC)}</select></div>`:''}<div class="f"><label>Profissional</label><select id="pr">${opts(PROF)}</select></div>
+  <div class="f"><label>Tipo</label><select id="tp">${opts(TIPO)}</select></div><div class="f"><label>Data</label><input id="dt" type="date" value="${hoje()}"></div></div>
+  ${rec?'<label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="en" style="width:auto"> Registrar como encaixe</label>':''}</div>
+  <div class="card"><h3 style="margin-top:0">Horários disponíveis</h3><div id="sl" class="slots"></div><div class="acts"><button class="btn" id="cf" disabled>Confirmar agendamento</button></div></div>`);
+  const carrega=()=>run(async()=>{sel=null;$('#cf').disabled=true;
+    const d=await api(`/horarios-disponiveis?profissional_id=${$('#pr').value}&data=${$('#dt').value}&tipo=${$('#tp').value}`);
+    $('#sl').innerHTML=d.horarios.length?d.horarios.map(h=>`<button class="slot" data-i="${h.inicio}" data-s="${h.sala_id}">${h.inicio.slice(11)} <small>· ${SALA[h.sala_id]}</small></button>`).join(''):'<div class="empty" style="width:100%">Sem horários livres nesta data.</div>';
+    document.querySelectorAll('.slot').forEach(b=>b.onclick=()=>{document.querySelectorAll('.slot').forEach(x=>x.classList.remove('on'));b.classList.add('on');sel=b.dataset;$('#cf').disabled=false})});
+  ['pr','tp','dt'].forEach(i=>$('#'+i).onchange=carrega);carrega();
+  $('#cf').onclick=()=>confirma('Confirmar agendamento',`${PROF[$('#pr').value][0]} · ${TIPO[$('#tp').value]}<br><b>${fdt(sel.i)}</b> · ${SALA[sel.s]}`,()=>run(async()=>{
+    const b={profissional_id:+$('#pr').value,tipo:$('#tp').value,inicio:sel.i,sala_id:+sel.s};if(rec)b.paciente_id=+$('#pc').value;
+    await api(rec&&$('#en').checked?'/encaixes':'/agendamentos',{method:'POST',body:b});toast('Agendamento confirmado!');location.hash=rec?'ags':'minhas';rota()}).catch?.(()=>{}))}
+
+// ---------- Agenda (HU6) ----------
+async function agenda(){
+  const fixo=S.perfil=='profissional';
+  V(`<h1>${fixo?'Minha agenda':'Agenda do profissional'}</h1><p class="sub">Consultas e bloqueios do dia.</p><div class="card"><div class="bar2">${fixo?'':`<select id="pr">${opts(PROF)}</select>`}<input id="dt" type="date" value="${hoje()}"></div><div id="ag"></div></div>`);
+  const pid=()=>fixo?profId():$('#pr').value;
+  const go=()=>run(async()=>{const d=await api(`/profissionais/${pid()}/agenda?data=${$('#dt').value}`);
+    window.AG=d.consultas;$('#ag').innerHTML=(d.bloqueios.length?d.bloqueios.map(b=>`<p style="background:var(--wab);color:var(--wa);padding:8px 12px;border-radius:9px">⛔ Bloqueio #${b.id}: ${b.inicio.slice(11)}–${b.fim.slice(11)} ${esc(b.motivo||'')}</p>`).join(''):'')+
+    tabela(['Início','Fim','Paciente','Tipo','Sala','Status'],d.consultas.map(c=>[c.inicio.slice(11),c.fim.slice(11),c.paciente_nome,c.tipo,SALA[c.sala_id],badge(c.status)]))});
+  $('#dt').onchange=go;if($('#pr'))$('#pr').onchange=go;go()}
+const profId=()=>({ana:1,bruno:2,carla:3})[S.login];
+
+// ---------- Bloqueio (HU4) ----------
+function bloqueio(){
+  V(`<h1>Bloquear agenda</h1><p class="sub">Consultas confirmadas no período ficam como AFETADO e a recepção é responsável por remarcá-las.</p><div class="card">
+  <div class="row"><div class="f"><label>Início</label><input id="i" type="datetime-local" step="1200"></div><div class="f"><label>Fim</label><input id="f" type="datetime-local" step="1200"></div></div>
+  <div class="f"><label>Motivo</label><input id="m"></div><div class="acts"><button class="btn" id="b">Bloquear período</button></div></div><div id="res"></div>`);
+  $('#b').onclick=()=>{if(!$('#i').value||!$('#f').value)return toast('Informe início e fim.',1);
+    confirma('Bloquear agenda','Os agendamentos do período serão marcados como afetados. Deseja continuar?',()=>run(async()=>{
+    const d=await api(`/profissionais/${profId()}/bloqueios`,{method:'POST',body:{inicio:$('#i').value,fim:$('#f').value,motivo:$('#m').value||null}});
+    toast('Agenda bloqueada.');$('#res').innerHTML=`<div class="card"><b>Bloqueio #${d.id} criado.</b><p>${d.agendamentos_afetados.length} agendamento(s) afetado(s). Informe o nº #${d.id} à recepção.</p></div>`}),'Bloquear')}}
+
+// ---------- Afetados (HU5) ----------
+function afetados(){
+  V(`<h1>Bloqueios e afetados</h1><p class="sub">Informe o número do bloqueio para localizar os pacientes e seus telefones.</p><div class="card"><div class="bar2"><input id="bi" type="number" min="1" placeholder="Nº do bloqueio"><button class="btn" id="bs" style="flex:0">Buscar</button></div><div id="af"></div></div>`);
+  $('#bs').onclick=()=>run(async()=>{const l=await api(`/bloqueios/${$('#bi').value}/agendamentos-afetados`);window.AF=l;
+    $('#af').innerHTML=tabela(['#','Paciente','Telefone','Profissional','Horário','Status'],l.map(x=>[x.agendamento_id,esc(x.paciente_nome),esc(x.paciente_telefone||'—'),PROF[x.profissional_id][0],fdt(x.inicio),badge(x.status)]),'rm');
+    window.rm=i=>remarcar({id:l[i].agendamento_id,inicio:l[i].inicio,profissional_id:l[i].profissional_id})})}
+
+// ---------- Ocupação (HU7) ----------
+function ocupacao(){
+  V(`<h1>Ocupação</h1><p class="sub">Indicadores agregados, sem dados de pacientes.</p><div class="card"><div class="bar2"><input id="d1" type="date" value="${hoje()}"><input id="d2" type="date" value="${hoje()}"></div></div><div id="oc"></div>`);
+  const bloco=(t,l)=>`<div class="card"><h3 style="margin-top:0">${t}</h3>${l.map(x=>`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between"><b>${esc(x.nome)}</b><span>${x.percentual_ocupacao}% · ${x.minutos_ocupados} min ocupados · ${x.minutos_livres} livres</span></div><div class="bar"><i style="width:${Math.min(x.percentual_ocupacao,100)}%"></i></div></div>`).join('')}</div>`;
+  const go=()=>run(async()=>{const d=await api(`/gestao/ocupacao?de=${$('#d1').value}&ate=${$('#d2').value}`);$('#oc').innerHTML=bloco('Por sala',d.salas)+bloco('Por especialidade',d.especialidades)});
+  $('#d1').onchange=$('#d2').onchange=go;go()}
+
+iniciar();
+</script>
+</body>
+</html>
